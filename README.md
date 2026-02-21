@@ -1,2 +1,2 @@
-# Victor-Martin-Group-Project-2nd-Opportunity
-2nd opportunity version of our group project
+# Victor-Martin-Group-Project---DS2006
+Group project assignment for course DS2006 - Introduction to Data Science (Victor &amp; Martin)
