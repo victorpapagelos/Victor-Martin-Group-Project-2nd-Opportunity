@@ -47,7 +47,7 @@ def print_data_overview(df):
     print(df.describe(include="all"))
 
 
-# Simple mapping P/A/N
+# mapping P/A/N
 mapping = {"N": 0, "A": 1, "P": 2}
 
 def map_data(X):
@@ -127,7 +127,6 @@ def user_choice(df):
     
 
 # Evaluate
-# Evaluate
 def evaluate_model(df):
 
     if df is None:
@@ -143,16 +142,38 @@ def evaluate_model(df):
         if choice in ["1", "2", "3"]:
             break
         print("Invalid input.")
-
-    X = map_data(df.drop("Class", axis=1))
-    y = df["Class"]
-
-    test_size = get_test_size()
-    X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=test_size, stratify=y, random_state=42
-    )
+    
+    use_external = yes_no_prompt("Do you want to load an external evaluation file? (y/n): ")
 
     results = []
+
+    if use_external:
+
+        eval_df = file_check()
+        if eval_df is None:
+            print("Failed to load evaluation file.")
+            return
+        if "Class" not in eval_df.columns:
+            print("No 'Class' column found.")
+            return
+
+        # Train on FULL df
+        X_train = map_data(df.drop("Class", axis=1))
+        y_train = df["Class"]
+
+        # Test on external file
+        X_test = map_data(eval_df.drop("Class", axis=1))
+        y_test = eval_df["Class"]
+
+    else:
+        # Split df
+        X = map_data(df.drop("Class", axis=1))
+        y = df["Class"]
+
+        test_size = get_test_size()
+        X_train, X_test, y_train, y_test = train_test_split(
+            X, y, test_size=test_size, stratify=y, random_state=42
+        )
 
     def run(model, name):
         model.fit(X_train, y_train)
@@ -195,6 +216,7 @@ def evaluate_model(df):
             print("Results saved.")
         except:
             print("Error saving file.")
+
 
 
 # Create custom input
