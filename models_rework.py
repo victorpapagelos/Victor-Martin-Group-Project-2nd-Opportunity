@@ -44,7 +44,7 @@ def print_data_overview(df):
     print("Top 10 rows:")
     print(df.head(10))
     print("\nStatistics:")
-    print(df.describe(include="all"))
+    print(df.describe(include="all")) #column types
 
 
 # mapping P/A/N
